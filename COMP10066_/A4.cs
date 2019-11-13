@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * Rules Applied:
+ * 1. PascalCasing for method names
+ * 2. camelCasing for method arguments
+ * 3. PascalCasing for abbreviations
+ * 4. Vertically aligned curly brackets
+ */
+using System;
 using System.Collections.Generic;
 
 namespace COMP10066_Lab4
@@ -10,95 +17,141 @@ namespace COMP10066_Lab4
      * see http://www.calculator.net/standard-deviation-calculator.html
      * for sample standard deviation calculations
      *
-     * @author Joey Programmer
+     * @author Hary Ajay
      */
 
     public class A4
-    {
-        public static double Avg(List<double> x, bool incneg)
+    {   /// <summary>
+        /// This method returns the average of all
+        /// elements in the array
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <returns>average of the array</returns>
+        public static double Average(List<double> dataList)
         {
-            double s = Sum(x, incneg);
-            int c = 0;
-            for (int i = 0; i < x.Count; i++)
+            // This variable holds the sum of the array
+            // by calling the Sum method
+            double arraySum = Sum(dataList);
+            // This variable holds the count of non negative
+            // Double inetegers in the array
+            int count = 0;
+            // This loop counts the number of non negative
+            // double integers in the list
+            for (int i = 0; i < dataList.Count; i++)
             {
-                if (incneg || x[i] >= 0)
+                if (dataList[i] >= 0)
                 {
-                    c++;
+                    count++;
                 }
             }
-            if (c == 0)
+            // If the count of non negative double integers
+            // is zero. Then throw an exception.
+            if (count == 0)
             {
-                throw new ArgumentException("no values are > 0");
+                throw new ArgumentException("No values are > 0");
             }
-            return s / c;
+            // Otherwise return the average as sum/count
+            return arraySum / count;
         }
-
-        public static double Sum(List<double> x, bool incneg)
+        /// <summary>
+        /// This method returns the sum of all
+        /// elements in the array
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <returns>Sum of all elements in the array</returns>
+        public static double Sum(List<double> dataList)
         {
-            if (x.Count < 0)
+            // If the array has no values in it, throw an
+            // empty exception
+            if (dataList.Count < 0)
             {
-                throw new ArgumentException("x cannot be empty");
+                throw new ArgumentException("Data List cannot be empty");
             }
-
-            double sum = 0.0;
-            foreach (double val in x)
+            // Otherwise create an arrya sum variable
+            double arraySum = 0.0;
+            // Loop over the array and sum all positive values in it
+            foreach (double value in dataList)
             {
-                if (incneg || val >= 0)
+                if (value >= 0)
                 {
-                    sum += val;
+                    arraySum += value;
                 }
             }
-            return sum;
+            // Return array sum
+            return arraySum;
         }
-
-        public static double Median(List<double> data)
+        /// <summary>
+        /// This method returns the Median of all
+        /// elements in the array
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <returns>Median of the array</returns>
+        public static double Median(List<double> dataList)
         {
-            if (data.Count == 0)
+            // If the array has no values in it, throw an
+            // empty exception
+            if (dataList.Count == 0)
             {
-                throw new ArgumentException("Size of array must be greater than 0");
+                throw new ArgumentException("Size of the Data List must be greater than 0");
             }
-
-            data.Sort();
-
-            double median = data[data.Count / 2];
-            if (data.Count % 2 == 0)
-                median = (data[data.Count / 2] + data[data.Count / 2 - 1]) / 2;
-
+            // Othereise, sort the array
+            dataList.Sort();
+            // COmpute the median element at the middle of the array
+            double median = dataList[dataList.Count / 2];
+            // If the array is even in length then get mean of the two
+            // values at the middle
+            if (dataList.Count % 2 == 0)
+                median = (dataList[dataList.Count / 2] + dataList[dataList.Count / 2 - 1]) / 2;
+            // return the median
             return median;
         }
-
-        public static double SD(List<double> data)
+        /// <summary>
+        /// This method returns the Standard Deviation of all
+        /// elements in the array
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <returns>Standard Deviation of the array</returns>
+        public static double StandardDeviation(List<double> dataList)
         {
-            if (data.Count <= 1)
+            // If the array has less than 2 elements, throw and exception
+            if (dataList.Count <= 1)
             {
-                throw new ArgumentException("Size of array must be greater than 1");
+                throw new ArgumentException("Size of the Data List must be greater than 1");
             }
+            // Otherwise, compute the standard deviation of the array
+            int size = dataList.Count;
+            double sum = 0;
+            double average = Average(dataList);
 
-            int n = data.Count;
-            double s = 0;
-            double a = Avg(data, true);
-
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < size; i++)
             {
-                double v = data[i];
-                s += Math.Pow(v - a, 2);
+                double value = dataList[i];
+                sum += Math.Pow(value - average, 2);
             }
-            double stdev = Math.Sqrt(s / (n - 1));
-            return stdev;
+            // Computing and Returning the standard deviation
+            double stDev = Math.Sqrt(sum / (size - 1));
+            return stDev;
         }
 
-        // Simple set of tests that confirm that functions operate correctly
+        /// <summary>
+        /// The main method, creates a double array of integers
+        /// and tests the above methods by calling them and printing
+        /// the results
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            List<Double> testDataD = new List<Double> { 2.2, 3.3, 66.2, 17.5, 30.2, 31.1 };
+            // Create a list of double integers
+            List<double> testDataD = new List<Double> { 2.2, 3.3, 66.2, 17.5, 30.2, 31.1 };
 
-            Console.WriteLine("The sum of the array = {0}", Sum(testDataD, true));
-
-            Console.WriteLine("The average of the array = {0}", Avg(testDataD, true));
-
+            // Testing the sum method
+            Console.WriteLine("The sum of the array = {0}", Sum(testDataD));
+            // Testing the average method
+            Console.WriteLine("The average of the array = {0}", Average(testDataD));
+            // Testing the median method
             Console.WriteLine("The median value of the Double data set = {0}", Median(testDataD));
-
-            Console.WriteLine("The sample standard deviation of the Double test set = {0}\n", SD(testDataD));
+            // Testing the standard deviation method
+            Console.WriteLine("The sample standard deviation of the Double test set = {0}\n", StandardDeviation(testDataD));
         }
     }
 }
