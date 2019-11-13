@@ -126,6 +126,7 @@ namespace COMP10066_Lab4
             for (int i = 0; i < size; i++)
             {
                 double value = dataList[i];
+
                 sum += Math.Pow(value - average, 2);
             }
             // Computing and Returning the standard deviation
